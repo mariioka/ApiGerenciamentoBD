@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerenciamento</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="index.css" type="text/css" />
+</head>
+<body>
+    <div id="titulo">
+        <h1>Gerenciamento</h1>
+    </div>
+    <div id="gerenciamento">
+    <section id="Cidades">
+        <br>
+        <h2>Gerenciamento de Cidades</h2>
+
+    <table id="tabelaFormularioCidades">
+        <tr>
+            <td>ID:</td>
+            <td><input type="text" id="txtIdCid" /></td>
+        </tr>
+        <tr>
+            <td>Nome:</td>
+            <td><input type="text" id="txtNomeCid"></td>
+        </tr>
+        <tr>
+            <td>Estado:</td>
+            <td><input type="text" id="txtEstado" /></td>
+        </tr>
+        <tr>
+            <td>País:</td>
+            <td><input type="text" id="txtPais" /></td>
+        </tr>
+        <tr>
+            <td>População:</td>
+            <td><input type="text" id="txtPopulacao" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="button" value="Salvar" onclick="salvarCidade()" id="btnSalvarCid" />
+                <input type="button" value="Apagar" onclick="apagarCidade()" id="btnApagarCid" />
+                <input type="button" value="Cancelar" onclick="cancelarEdicaoCid()" id="btnCancelarCid" />
+            </td>
+        </tr>
+    </table>
+
+    <p style="font-weight: bold" id="paragrafoMensagemCidades"></p>
+
+    <table id="tabelaCidades">
+        <tr>
+            <td>
+                <input type="button" value="Nova" onclick="novaCidade()" id="btnNova" />
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Estado</th>
+            <th>País</th>
+            <th>População</th>
+        </tr>
+        <tbody id="corpoTabelaCidades"></tbody>
+    </table>
+
+    <script src="Cidade.js"></script>
+    <script>
+        const tabelaCidades = document.querySelector("#tabelaCidades");
+        const tabelaFormularioCidades = document.querySelector("#tabelaFormularioCidades");
+        const corpoTabelaCidades = document.querySelector("#corpoTabelaCidades");
+        const paragrafoMensagemCidades = document.querySelector("#paragrafoMensagemCidades");
+        const txtNomeCid = document.querySelector('#txtNomeCid');
+        const txtEstado = document.querySelector("#txtEstado");
+        const txtPais = document.querySelector("#txtPais");
+        const txtPopulacao = document.querySelector("#txtPopulacao");
+        const txtIdCid = document.querySelector("#txtIdCid");
+
+        const btnNova = document.querySelector('#btnNova');
+        const btnSalvarCid = document.querySelector('#btnSalvarCid');
+        const btnApagarCid = document.querySelector('#btnApagarCid');
+        const btnCancelarCid = document.querySelector('#btnCancelarCid');
+        var criandoNovaCidade = false;
+
+        inicializarCid();
+
+        function inicializarCid() {
+            criandoNovaCidade = false;
+            paragrafoMensagemCidades.textContent =
+                "Pressione o botão Nova ou selecione uma cidade da lista:";
+            txtIdCid.value = "";
+            txtNomeCid.value = '';
+            txtEstado.value = "";
+            txtPais.value = "";
+            txtPopulacao.value = "";
+            txtIdCid.disabled = true;
+            txtNomeCid.disabled = true;
+            txtEstado.disabled = true;
+            txtPais.disabled = true;
+            txtPopulacao.disabled = true;
+
+            btnNova.disabled = false;
+            btnSalvarCid.disabled = true;
+            btnApagarCid.disabled = true;
+            btnCancelarCid.disabled = true;
+
+            tabelaFormularioCidades.style.display = "none";
+            tabelaCidades.style.display = "inline";
+
+            listarTodasCidades();
+        }
+
+        function listarTodasCidades() {
+            const errorHandler = function (error) {
+                paragrafoMensagemCidades.textContent =
+                    "Erro ao listar cidades (código " + error.message + ")";
+            };
+            asyncLerCids(preencherTabelaCid, errorHandler);
+        }
+
+        function preencherTabelaCid(cidades) {
+            corpoTabelaCidades.innerHTML = "";
+            var n = cidades.length;
+            for (var i = 0; i < n; i++) {
+                let p = cidades[i];
+                let linha = corpoTabelaCidades.insertRow();
+                let celulaIdCid = linha.insertCell();
+                let celulaNomeCid = linha.insertCell();
+                let celulaEstado = linha.insertCell();
+                let celulaPais = linha.insertCell();
+                let celulaPopulacao = linha.insertCell();
+
+                let alink = document.createElement("a");
+                alink.textContent = p.id;
+                alink.href = "javascript:void(0)";
+                alink.onclick = function () {
+                    selecionarCidade(p.id); };
+                celulaIdCid.appendChild(alink);
+                celulaNomeCid.textContent = p.nome;
+                celulaEstado.textContent = p.estado;
+                celulaPais.textContent = p.pais;
+                celulaPopulacao.textContent = p.populacao;
+            }
+        }
+
+        function selecionarCidade(id) {
+            criandoNovaCidade = false;
+            const errorHandler = function (error) {
+                paragrafoMensagemCidades.textContent =
+                    "Erro ao selecionar cidade (código " + error.message + ")";
+            };
+            asyncLerCidById(id, preencherFormularioCid, errorHandler);
+        }
+
+        function preencherFormularioCid(cidade) {
+            paragrafoMensagemCidades.textContent =
+                "Altere e salve os dados da cidade, ou então apague o registro da cidade.";
+            txtIdCid.value = cidade.id;
+            txtNomeCid.value = cidade.nome;
+            txtEstado.value = cidade.estado;
+            txtPais.value = cidade.pais;
+            txtPopulacao.value = cidade.populacao;
+
+            txtIdCid.disabled = true;
+            txtNomeCid.disabled = false;
+            txtEstado.disabled = false;
+            txtPais.disabled = false;
+            txtPopulacao.disabled = false;
+
+            btnNova.disabled = true;
+            btnSalvarCid.disabled = false;
+            btnApagarCid.disabled = false;
+            btnCancelarCid.disabled = false;
+
+            tabelaFormularioCidades.style.display = "inline";
+            tabelaCidades.style.display = "none";
+        }
+
+        function novaCidade() {
+            paragrafoMensagemCidades.textContent =
+                "Preencha os dados da nova cidade...";
+            criandoNovaCidade = true;
+
+            txtIdCid.value = "";
+            txtNomeCid.value = '';
+            txtEstado.value = "";
+            txtPais.value = "";
+            txtPopulacao.value = "";
+
+            txtIdCid.disabled = true;
+            txtNomeCid.disabled = false;
+            txtEstado.disabled = false;
+            txtPais.disabled = false;
+            txtPopulacao.disabled = false;
+
+            btnNova.disabled = true;
+            btnSalvarCid.disabled = false;
+            btnApagarCid.disabled = true;
+            btnCancelarCid.disabled = false;
+
+            tabelaFormularioCidades.style.display = "inline";
+            tabelaCidades.style.display = "none";
+        }
+
+        function salvarCidade() {
+            if (criandoNovaCidade) {
+                criarCidade();
+            } else {
+                alterarCidade();
+            }
+        }
+
+        function criarCidade() {
+            const dadosCidade = {
+                'nome': txtNomeCid.value,
+                'estado': txtEstado.value,
+                'pais': txtPais.value,
+                'populacao': txtPopulacao.value,
+            };
+            const errorHandler = function (error) {
+                paragrafoMensagemCidades.textContent =
+                    "Erro ao criar nova cidade (código " + error.message + ")";
+            };
+            asyncCriarCid(dadosCidade, inicializarCid, errorHandler);
+        }
+
+        function alterarCidade() {
+            const errorHandler = function (error) {
+                paragrafoMensagemCidades.textContent =
+                    "Erro ao alterar cidade (código " + error.message + ")";
+            };
+            const dadosCidade = {
+                'id': txtIdCid.value,
+                'nome': txtNomeCid.value,
+                'estado': txtEstado.value,
+                'pais': txtPais.value,
+                'populacao': txtPopulacao.value,
+            };
+            asyncAlterarCid(dadosCidade, inicializarCid, errorHandler);
+        }
+
+        function cancelarEdicaoCid() {
+            inicializarCid();
+        }
+
+        function apagarCidade() {
+            const id = txtIdCid.value;
+            const errorHandler = function (error) {
+                paragrafoMensagemCidades.textContent =
+                    "Erro ao apagar cidade (código " + error.message + ")";
+            };
+            asyncApagarCid(id, inicializarCid, errorHandler);
+        }
+    </script>
+    </section>
+
+    <section id="Empregados">
+        <br>
+        <h2>Gerenciamento de Empregados</h2>
+    
+    <table id="tabelaFormularioEmpr">
+        <tr>
+            <td>ID:</td>
+            <td><input type="text" id="txtIdEmpr"></td>
+        </tr>
+        <tr>
+            <td>Nome:</td>
+            <td><input type="text" id="txtNomeEmpr"></td>
+        </tr>
+        <tr>
+            <td>Cargo:</td>
+            <td><input type="text" id="txtCargo"></td>
+        </tr>
+        <tr>
+            <td>Salário:</td>
+            <td><input type="text" id="txtSalario"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="button" value="Salvar" onclick="salvarEmpregado()" id="btnSalvarEmpr" />
+                <input type="button" value="Apagar" onclick="apagarEmpregado()" id="btnApagarEmpr" />
+                <input type="button" value="Cancelar" onclick="cancelarEdicaoEmpr()" id="btnCancelarEmpr" />
+            </td>
+        </tr>
+    </table>
+    
+    <p style="font-weight: bold" id="paragrafoMensagemEmpregados"></p>
+    
+    <table id="tabelaEmpregados">
+        <tr>
+            <td>
+                <input type="button" value="Novo" onclick="novoEmpregado()" id="btnNovo" />
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Salário</th>
+        </tr>
+        <tbody id="corpoTabelaEmpregados"></tbody>
+    </table>
+    
+    <script src="Empregado.js"></script>
+    <script>
+        const tabelaEmpregados = document.querySelector("#tabelaEmpregados");
+        const tabelaFormularioEmpr = document.querySelector("#tabelaFormularioEmpr");
+        const corpoTabelaEmpregados = document.querySelector("#corpoTabelaEmpregados");
+        const paragrafoMensagemEmpregados = document.querySelector("#paragrafoMensagemEmpregados");
+        const txtNomeEmpr = document.querySelector('#txtNomeEmpr');
+        const txtCargo = document.querySelector("#txtCargo");
+        const txtSalario = document.querySelector("#txtSalario");
+        const txtIdEmpr = document.querySelector("#txtIdEmpr");
+
+        const btnNovo = document.querySelector('#btnNovo');
+        const btnSalvarEmpr = document.querySelector('#btnSalvarEmpr');
+        const btnApagarEmpr = document.querySelector('#btnApagarEmpr');
+        const btnCancelarEmpr = document.querySelector('#btnCancelarEmpr');
+        var criandoNovoEmpregado = false;
+
+        inicializarEmpr();
+
+        function inicializarEmpr() {
+            criandoNovoEmpregado = false;
+            paragrafoMensagemEmpregados.textContent =
+                "Pressione o botão Novo ou selecione um empregado da lista:";
+            txtIdEmpr.value = "";
+            txtNomeEmpr.value = '';
+            txtCargo.value = "";
+            txtSalario.value = "";
+            txtIdEmpr.disabled = true;
+            txtNomeEmpr.disabled = true;
+            txtCargo.disabled = true;
+            txtSalario.disabled = true;
+
+            btnNovo.disabled = false;
+            btnSalvarEmpr.disabled = true;
+            btnApagarEmpr.disabled = true;
+            btnCancelarEmpr.disabled = true;
+
+            tabelaFormularioEmpr.style.display = "none";
+            tabelaEmpregados.style.display = "inline";
+
+            listarTodosEmpregados();
+        }
+
+        function listarTodosEmpregados() {
+            const errorHandler = function (error) {
+                paragrafoMensagemEmpregados.textContent =
+                    "Erro ao listar empregados (código " + error.message + ")";
+            };
+            asyncLerEmprs(preencherTabelaEmpr, errorHandler);
+        }
+
+        function preencherTabelaEmpr(empregados) {
+            corpoTabelaEmpregados.innerHTML = "";
+            var n = empregados.length;
+            for (var i = 0; i < n; i++) {
+                let p = empregados[i];
+                let linha = corpoTabelaEmpregados.insertRow();
+                let celulaIdEmpr = linha.insertCell();
+                let celulaNomeEmpr = linha.insertCell();
+                let celulaCargo = linha.insertCell();
+                let celulaSalario = linha.insertCell();
+
+                let alink = document.createElement("a");
+                alink.textContent = p.id;
+                alink.href = "javascript:void(0)";
+                alink.onclick = function () {
+                    selecionarEmpregado(p.id); };
+                celulaIdEmpr.appendChild(alink);
+                celulaNomeEmpr.textContent = p.nome;
+                celulaCargo.textContent = p.cargo;
+                celulaSalario.textContent = p.salario;
+            }
+        }
+
+        function selecionarEmpregado(id) {
+            criandoNovoEmpregado = false;
+            const errorHandler = function (error) {
+                paragrafoMensagemEmpregados.textContent =
+                    "Erro ao selecionar empregado (código " + error.message + ")";
+            };
+            asyncLerEmprById(id, preencherFormularioEmpr, errorHandler);
+        }
+
+        function preencherFormularioEmpr(empregado) {
+            paragrafoMensagemEmpregados.textContent =
+                "Altere e salve os dados do empregado, ou então apague o registro do empregado.";
+            txtIdEmpr.value = empregado.id;
+            txtNomeEmpr.value = empregado.nome;
+            txtCargo.value = empregado.cargo;
+            txtSalario.value = empregado.salario;
+
+            txtIdEmpr.disabled = true;
+            txtNomeEmpr.disabled = false;
+            txtCargo.disabled = false;
+            txtSalario.disabled = false;
+
+            btnNovo.disabled = true;
+            btnSalvarEmpr.disabled = false;
+            btnApagarEmpr.disabled = false;
+            btnCancelarEmpr.disabled = false;
+
+            tabelaFormularioEmpr.style.display = "inline";
+            tabelaEmpregados.style.display = "none";
+        }
+
+        function novoEmpregado() {
+            paragrafoMensagemEmpregados.textContent =
+                "Preencha os dados do novo empregado...";
+            criandoNovoEmpregado = true;
+
+            txtIdEmpr.value = "";
+            txtNomeEmpr.value = '';
+            txtCargo.value = "";
+            txtSalario.value = "";
+
+            txtIdEmpr.disabled = true;
+            txtNomeEmpr.disabled = false;
+            txtCargo.disabled = false;
+            txtSalario.disabled = false;
+
+            btnNovo.disabled = true;
+            btnSalvarEmpr.disabled = false;
+            btnApagarEmpr.disabled = true;
+            btnCancelarEmpr.disabled = false;
+
+            tabelaFormularioEmpr.style.display = "inline";
+            tabelaEmpregados.style.display = "none";
+        }
+
+        function salvarEmpregado() {
+            if (criandoNovoEmpregado) {
+                criarEmpregado();
+            } else {
+                alterarEmpregado();
+            }
+        }
+
+        function criarEmpregado() {
+            const dadosEmpregado = {
+                'nome': txtNomeEmpr.value,
+                'cargo': txtCargo.value,
+                'salario': txtSalario.value,
+            };
+            const errorHandler = function (error) {
+                paragrafoMensagemEmpregados.textContent =
+                    "Erro ao criar novo empregado (código " + error.message + ")";
+            };
+            asyncCriarEmpr(dadosEmpregado, inicializarEmpr, errorHandler);
+        }
+
+        function alterarEmpregado() {
+            const errorHandler = function (error) {
+                paragrafoMensagemEmpregados.textContent =
+                    "Erro ao alterar empregado (código " + error.message + ")";
+            };
+            const dadosEmpregado = {
+                'id': txtIdEmpr.value,
+                'nome': txtNomeEmpr.value,
+                'cargo': txtCargo.value,
+                'salario': txtSalario.value,
+            };
+            asyncAlterarEmpr(dadosEmpregado, inicializarEmpr, errorHandler);
+        }
+
+        function cancelarEdicaoEmpr() {
+            inicializarEmpr();
+        }
+
+        function apagarEmpregado() {
+            const id = txtIdEmpr.value;
+            const errorHandler = function (error) {
+                paragrafoMensagemEmpregados.textContent =
+                    "Erro ao apagar empregado (código " + error.message + ")";
+            };
+            asyncApagarEmpr(id, inicializarEmpr, errorHandler);
+        }
+    </script>
+    </section>
+    </div>
+</body>
+</html>
