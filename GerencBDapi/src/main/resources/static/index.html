@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerenciamento</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="index.css" type="text/css" />
+</head>
+<body>
+    <div id="titulo">
+        <h1>Gerenciamento</h1>
+    </div>
+    <div id="gerenciamento">
+    <section id="cidades">
+        <h2>Gerenciamento de Cidades</h2>
+    
+    <p style="font-weight: bold" id="paragrafoMensagemCidades"></p>
+
+    <table id="tabelaFormularioCidades">
+        <tr>
+            <td>ID:</td>
+            <td><input type="text" id="txtIdCid" /></td>
+        </tr>
+        <tr>
+            <td>Nome:</td>
+            <td><input type="text" id="txtNomeCid"></td>
+        </tr>
+        <tr>
+            <td>Estado:</td>
+            <td><input type="text" id="txtEstado" /></td>
+        </tr>
+        <tr>
+            <td>País:</td>
+            <td><input type="text" id="txtPais" /></td>
+        </tr>
+        <tr>
+            <td>População:</td>
+            <td><input type="text" id="txtPopulacao" /></td>
+        </tr>
+        <tr id="botoes">
+            <td></td>
+            <td>
+                <input type="button" value="Salvar" onclick="salvarCidade()" id="btnSalvarCid" />
+                <input type="button" value="Apagar" onclick="apagarCidade()" id="btnApagarCid" />
+                <input type="button" value="Cancelar" onclick="cancelarEdicaoCid()" id="btnCancelarCid" />
+            </td>
+        </tr>
+    </table>
+
+    <table id="tabelaCidades">
+        <tr>
+            <td>
+                <input type="button" value="Nova" onclick="novaCidade()" id="btnNova" />
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Estado</th>
+            <th>País</th>
+            <th>População</th>
+        </tr>
+        <tbody id="corpoTabelaCidades"></tbody>
+    </table>
+    
+    </section>
+
+    <section id="empregados">
+        <h2>Gerenciamento de Empregados</h2>
+
+    <p style="font-weight: bold" id="paragrafoMensagemEmpregados"></p>
+    
+    <table id="tabelaFormularioEmpr">
+        <tr>
+            <td>ID:</td>
+            <td><input type="text" id="txtIdEmpr"></td>
+        </tr>
+        <tr>
+            <td>Nome:</td>
+            <td><input type="text" id="txtNomeEmpr"></td>
+        </tr>
+        <tr>
+            <td>Cargo:</td>
+            <td><input type="text" id="txtCargo"></td>
+        </tr>
+        <tr>
+            <td>Salário:</td>
+            <td><input type="text" id="txtSalario"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td id="botoes">
+                <input type="button" value="Salvar" onclick="salvarEmpregado()" id="btnSalvarEmpr" />
+                <input type="button" value="Apagar" onclick="apagarEmpregado()" id="btnApagarEmpr" />
+                <input type="button" value="Cancelar" onclick="cancelarEdicaoEmpr()" id="btnCancelarEmpr" />
+            </td>
+        </tr>
+    </table>
+    
+    <table id="tabelaEmpregados">
+        <tr>
+            <td>
+                <input type="button" value="Novo" onclick="novoEmpregado()" id="btnNovo" />
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Salário</th>
+        </tr>
+        <tbody id="corpoTabelaEmpregados"></tbody>
+    </table>
+    
+    </section>
+    </div>
+
+    <script src="Cidade.js" defer></script>
+    <script src="Empregado.js" defer></script>
+    
+</body>
+</html>
