@@ -9,4 +9,5 @@ Sistema de gerenciamento de Cidades e Empregados, composto por uma API REST inte
 - MySQL
 
 ### Preview
-![image](https://github.com/user-attachments/assets/d43668a4-5ce8-488d-8aea-092e0a72371b)
+
+<img src="https://github.com/mariioka/ApiGerenciamentoBD/blob/main/preview.png"/>
