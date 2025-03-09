@@ -3,10 +3,10 @@ Sistema de gerenciamento de Cidades e Empregados, composto por uma API REST inte
 
 ### Tecnologias utilizadas
 - Java
+- JS
 - HTML5
 - CSS3
-- JS
-- BD MySQL
+- MySQL
 
 ### Preview
-![image](https://github.com/user-attachments/assets/198a1aff-0df3-47ca-a0c9-e5f9296fca05)
+![image](https://github.com/user-attachments/assets/d43668a4-5ce8-488d-8aea-092e0a72371b)
